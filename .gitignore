@@ -1,0 +1,14 @@
+# --- Dependencias y configuración local ---
+.bundle/
+vendor/bundle/
+# NO añadir Gemfile.lock aquí, ese DEBE subirse.
+
+# --- Archivos de datos y temporales ---
+historial.txt
+*.log
+tmp/
+*.swp
+
+# --- Sistema ---
+.DS_Store
+Thumbs.db

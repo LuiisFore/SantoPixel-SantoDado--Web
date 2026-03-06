@@ -1,0 +1,74 @@
+Temas de Sonido para Canciones:
+
+Howler.js (El estándar actual) (Audio JS) [ligero]
+Lo mejor: Máxima compatibilidad entre navegadores, audio espacial y grupos de sonidos.
+Uso: Juegos, apps interactivas y reproductores generales.
+
+Wavesurfer.js (Visualización) [Medio]
+Lo mejor: Genera ondas de audio interactivas (estilo SoundCloud).
+Uso: Editores de audio, podcasts y reproductores con diseño visual.
+
+Tone.js (Producción Musical) [Pesado]
+Lo mejor: Basado en teoría musical (BPM, compases, sintetizadores) y efectos en tiempo real.
+Uso: Apps de creación musical y experiencias sonoras complejas.
+
+Nativo (HTML5 / Web Audio API) [Peso Cero]
+Lo mejor: Sin dependencias externas, peso cero y rendimiento máximo en navegadores modernos.
+Uso: Efectos de sonido simples (clicks), música de fondo básica o cuando no quieres cargar librerías extra.
+
+
+Temas de Visuales:
+
+Three.js (El estándar de la industria) [Considerable]
+Lo mejor: Flexibilidad total, comunidad gigante y ecosistema React Three Fiber (si usas React). Soporta el nuevo estándar WebGPU para máximo rendimiento.
+Uso: Sitios web creativos, visualización de datos 3D y arte interactivo.
+
+Babylon.js (El motor "todo incluido") [Pesado]
+Lo mejor: Es un motor de juegos completo (física, colisiones y herramientas de depuración integradas). Muy estructurado y robusto para proyectos grandes.
+Uso: Videojuegos web complejos, configuradores de productos técnicos y simulaciones.
+
+Spline (Diseño para no-programadores) [DEPENDE]
+Lo mejor: Herramienta visual (tipo Figma pero 3D). Diseñas en su app y exportas un código simple para embeber. Permite colaborar en tiempo real.
+Uso: Landing pages con elementos 3D, interfaces de usuario (UI) modernas y prototipado rápido.
+
+PixiJS (El rey del 2D) [Medio]
+Lo mejor: Si no necesitas 3D, Pixi es el motor 2D más rápido que existe. Maneja miles de objetos en pantalla sin esfuerzo.
+Uso: Juegos 2D, banners interactivos, efectos de partículas y animaciones fluidas.
+
+Nativo (WebGPU / WebGL) [Peso Cero]
+Lo mejor: Sin librerías. WebGPU es el estándar de 2026 que da acceso directo a la potencia de la tarjeta gráfica (GPU).
+Uso: Cuando necesitas optimización extrema "al metal" o quieres crear tu propio motor desde cero.
+
+===========================================================
+GUÍA DE PESO Y OPTIMIZACIÓN: JUEGO WEB / MÓVIL (SINATRA)
+===========================================================
+
+1. PESO IDEAL DEL JUEGO (DOWNLOAD SIZE):
+-----------------------------------------------------------
+* Excelente: < 5 MB (Carga instantánea en 4G/5G).
+* Estándar:  10 - 25 MB (Equilibrio entre calidad y velocidad).
+* Límite:    > 50 MB (Riesgo alto de abandono o cierre en móviles).
+
+2. OPTIMIZACIÓN DE ASSETS:
+-----------------------------------------------------------
+* IMÁGENES: Usar formato .webp (ahorra ~30% frente a PNG).
+* AUDIO:    Usar .mp3 o .ogg en MONO (el estéreo pesa el doble).
+* CÓDIGO:   Minificar archivos JS/CSS (.min.js).
+* COMPRESIÓN: Configurar Sinatra/Nginx con Gzip o Brotli.
+
+3. PERSISTENCIA EN EL NAVEGADOR:
+-----------------------------------------------------------
+* PWA (Service Workers): Permite que el juego se instale en el
+  móvil y funcione offline, guardando los archivos localmente.
+* ESTRATEGIA: Sinatra sirve el "bundle" inicial y el navegador 
+  lo almacena en IndexedDB o Cache API.
+
+4. LIMITACIONES TÉCNICAS EN MÓVILES:
+-----------------------------------------------------------
+* RAM: Un juego de 20MB puede ocupar 200MB en RAM al 
+  descomprimir texturas. Móviles gama media limitan las 
+  pestañas a ~256MB-512MB de RAM.
+* EJECUCIÓN: Sinatra solo entrega los archivos; el procesador 
+  del móvil del usuario es quien hace todo el trabajo.
+
+===========================================================
