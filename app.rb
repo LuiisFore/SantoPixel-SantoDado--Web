@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'json'
 
-set :public_folder, File.dirname(__FILE__) + '/public'
+set :public_folder, 'public'
 
 get '/' do
   erb :index

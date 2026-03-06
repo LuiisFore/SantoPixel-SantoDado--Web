@@ -156,17 +156,17 @@ main {
 
 #soundcloud:hover, #soundcloud:active {
   border: 1px solid var(--text-color-alternative);
-  background: rgb(255, 85, 0);
+  background: rgb(255, 122, 56);
   color: var(--text-color-alternative);
-  box-shadow: 0 0 10px rgb(255, 85, 0);
+  box-shadow: 0 0 10px rgb(255, 122, 56);
   cursor: pointer;
 }
 
 #youtube:hover, #youtube:active {
   border: 1px solid var(--text-color-alternative);
-  background: rgb(255, 0, 0);
+  background: var(--color-error);
   color: var(--text-color-alternative);
-  box-shadow: 0 0 10px rgb(255, 0, 0);
+  box-shadow: 0 0 10px var(--color-error);
   cursor: pointer;
 }
 
@@ -201,6 +201,21 @@ main {
   max-width: 640px;     
   height: auto;         
   aspect-ratio: 16 / 9; 
+}
+
+.video-flexible:hover,
+.video-flexible:active{
+  background: var(--text-color);
+  color: var(--bg-color);
+  box-shadow: 0 0 10px var(--text-color);
+  cursor: pointer;
+}
+
+.video-flexible.is-playing {
+  background: var(--text-color);
+  color: var(--bg-color);
+  box-shadow: 0 0 10px var(--text-color);
+  cursor: pointer;
 }
 
 /* =========================================

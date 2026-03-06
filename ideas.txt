@@ -1,3 +1,8 @@
+===========================================================
+Recursos Visuales y auditivos por explorar
+===========================================================
+
+
 Temas de Sonido para Canciones:
 
 Howler.js (El estándar actual) (Audio JS) [ligero]
@@ -38,6 +43,7 @@ Uso: Juegos 2D, banners interactivos, efectos de partículas y animaciones fluid
 Nativo (WebGPU / WebGL) [Peso Cero]
 Lo mejor: Sin librerías. WebGPU es el estándar de 2026 que da acceso directo a la potencia de la tarjeta gráfica (GPU).
 Uso: Cuando necesitas optimización extrema "al metal" o quieres crear tu propio motor desde cero.
+===========================================================
 
 ===========================================================
 GUÍA DE PESO Y OPTIMIZACIÓN: JUEGO WEB / MÓVIL (SINATRA)
@@ -70,5 +76,52 @@ GUÍA DE PESO Y OPTIMIZACIÓN: JUEGO WEB / MÓVIL (SINATRA)
   pestañas a ~256MB-512MB de RAM.
 * EJECUCIÓN: Sinatra solo entrega los archivos; el procesador 
   del móvil del usuario es quien hace todo el trabajo.
+===========================================================
 
+===========================================================
+GUÍA DE PESO Y OPTIMIZACIÓN: JUEGO WEB / MÓVIL (SINATRA)
+===========================================================
+////////////////////////////ruby
+require 'net/http'
+require 'rexml/document' # Para leer el XML de YouTube
+
+get '/' do
+  channel_id = "UCxxxxxxxxxxxxxxx" # <--- PON AQUÍ TU ID
+  
+  begin
+    # 1. Pedimos el feed de videos al servidor de YouTube
+    url = "https://www.youtube.com/feeds/videos.xml?channel_id=#{channel_id}"
+    xml_data = Net::HTTP.get(URI(url))
+    
+    # 2. Parseamos el XML para buscar el primer video
+    doc = REXML::Document.new(xml_data)
+    # El primer 'yt:videoId' que encuentre es el más reciente
+    @ultimo_video_id = doc.elements["//yt:videoId"].text
+  rescue
+    # Si algo falla (YouTube caído, ID mal puesto), ponemos uno por defecto
+    @ultimo_video_id = "dQw4w9WgXcQ" 
+  end
+
+  erb :index
+end
+
+////////////////////////////JS
+// En tu script de YouTube, donde creas el Player
+window.onYouTubeIframeAPIReady = function() {
+  new YT.Player('Ultimo-Video', {
+    videoId: '<%= @ultimo_video_id %>', // <--- ¡RUBY ESCRIBE EL ID AQUÍ!
+    events: {
+      'onStateChange': function(event) {
+        const iframe = document.getElementById('Ultimo-Video');
+        if (!iframe) return;
+        
+        if (event.data === 1) {
+          iframe.classList.add('is-playing');
+        } else if (event.data === 2 || event.data === 0) {
+          iframe.classList.remove('is-playing');
+        }
+      }
+    }
+  });
+};
 ===========================================================

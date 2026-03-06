@@ -1,14 +1,25 @@
 # --- Dependencias y configuración local ---
 .bundle/
 vendor/bundle/
-# NO añadir Gemfile.lock aquí, ese DEBE subirse.
+# NO añadir Gemfile.lock aquí, ese DEBE subirse al repo.
 
-# --- Archivos de datos y temporales ---
+# --- Seguridad y Variables de Entorno ---
+.env
+.env.*
+# (Nunca subas tus contraseñas, tokens o configuraciones secretas a GitHub)
+
+# --- Archivos de datos, temporales y bases de datos ---
 historial.txt
 *.log
 tmp/
 *.swp
+*.sqlite3
+*.db
+*.db-journal
 
-# --- Sistema ---
+# --- Sistema OS ---
 .DS_Store
+.AppleDouble
+.LSOverride
 Thumbs.db
+ehthumbs.db

@@ -7,30 +7,44 @@ NC='\033[0m'
 
 echo -e "${INFO}===> Configurando entorno de dados en Ruby...${NC}"
 
-# 1. Asegurar permisos
-chmod +x "$0"
-
-# 2. Instalar Ruby y dependencias de compilación
+# 1. Instalar Ruby si no existe
 if ! command -v ruby &> /dev/null; then
-    echo "Instalando Ruby..."
-    sudo apt-get update && sudo apt-get install -y ruby-full build-essential ruby-dev
+    echo -e "${INFO}Instalando Ruby...${NC}"
+    sudo apt-get update && sudo apt-get install -y ruby-full
 else
     echo -e "${EXITO}v Ruby ya está instalado.${NC}"
 fi
 
-# 3. INSTALACIÓN ROBUSTA DE BUNDLER
+# 2. Instalar herramientas de compilación (Necesarias para nio4r y otras gemas nativas)
+if ! dpkg -s build-essential ruby-dev &> /dev/null; then
+    echo -e "${INFO}Instalando dependencias de compilación (build-essential, ruby-dev)...${NC}"
+    sudo apt-get update && sudo apt-get install -y build-essential ruby-dev
+else
+    echo -e "${EXITO}v Herramientas de compilación ya instaladas.${NC}"
+fi
+
+# 3. Instalación robusta de Bundler
 if ! command -v bundle &> /dev/null; then
-    echo "Bundler no encontrado. Intentando instalar vía apt..."
+    echo -e "${INFO}Bundler no encontrado. Intentando instalar vía apt...${NC}"
     sudo apt-get install -y ruby-bundler || sudo gem install bundler
 else
     echo -e "${EXITO}v Bundler ya está listo.${NC}"
 fi
 
-# 4. Instalar las gemas
+# 4. Configurar Bundler para el proyecto (Evita el error de permisos /var/lib/gems)
+echo -e "${INFO}===> Configurando Bundler para instalación local...${NC}"
+bundle config set --local path 'vendor/bundle'
+
+# 5. Proteger el repositorio de Git
+if [ ! -f .gitignore ] || ! grep -q "vendor/" .gitignore; then
+    echo "vendor/" >> .gitignore
+    echo -e "${EXITO}v Carpeta 'vendor/' añadida al .gitignore para mantener limpio el repositorio.${NC}"
+fi
+
+# 6. Instalar las gemas (SIN SUDO)
 echo -e "${INFO}===> Instalando dependencias del Gemfile...${NC}"
-# Usamos 'sudo' aquí porque antes instalaste Sinatra con sudo y puede haber conflictos de permisos
-sudo bundle install
+bundle install
 
 echo -e "${EXITO}===> ¡Todo listo!${NC}"
 echo "Limpia el puerto por si acaso: fuser -k 4567/tcp"
-echo "Ejecuta: ruby servidor_real.rb"
+echo "Ejecuta: bundle exec ruby servidor_real.rb"
