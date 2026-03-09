@@ -3,7 +3,6 @@
  # Gestor de Sponsors
 ========================================= */
 
-
 document.addEventListener("DOMContentLoaded", () => {
   fetch('/sponsors.json')
     .then(response => response.json())
@@ -11,6 +10,13 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch(error => {
         console.error("> [SYSTEM ERROR] Fallo al cargar sponsors:", error);
         document.querySelector(".sponsor-grid").innerHTML = "<p class='blink' style='color:red'>[ERROR] RECURSOS NO ENCONTRADOS</p>";
+    });
+      fetch('/dado-sponsors.json')
+    .then(response => response.json())
+    .then(data => renderSponsorsDado(data))
+    .catch(error => {
+        console.error("> [SYSTEM ERROR] Fallo al cargar sponsors:", error);
+        document.querySelector(".sponsor-dado-grid").innerHTML = "<p class='blink' style='color:red'>[ERROR] RECURSOS NO ENCONTRADOS</p>";
     });
 });
 
@@ -30,11 +36,92 @@ function renderSponsors(sponsorsList) {
   });   
 }
 
+function renderSponsorsDado(sponsorsList) {
+  const grid = document.querySelector(".sponsor-dado-grid");
+  if (!grid) return;
+
+  sponsorsList.forEach((sponsor) => {
+    const box = document.createElement("a");
+    box.className = "partner-box";
+    box.innerText = `[${sponsor.name}]`;
+    box.href = sponsor.url;
+    box.target = "_blank";
+    box.rel = "noopener noreferrer";
+    
+    grid.appendChild(box);
+  });   
+}
+
+/* 
+=========================================
+ # Gestor Carruceles
+========================================= */
+
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Aquí pones TODAS las rutas de tus imágenes
+    // Puedes añadir 10, 20 o 50, las que quieras.
+    const misImagenes = [
+        "https://i.etsystatic.com/30753957/r/il/0a0e42/6052212684/il_fullxfull.6052212684_ltk0.jpg",
+        "https://i.etsystatic.com/30753957/r/il/0a0e42/6052212684/il_fullxfull.6052212684_ltk0.jpg",
+        "https://i.etsystatic.com/30753957/r/il/0a0e42/6052212684/il_fullxfull.6052212684_ltk0.jpg",
+        "https://i.etsystatic.com/30753957/r/il/0a0e42/6052212684/il_fullxfull.6052212684_ltk0.jpg",
+        "https://i.etsystatic.com/30753957/r/il/0a0e42/6052212684/il_fullxfull.6052212684_ltk0.jpg",
+        "https://i.etsystatic.com/30753957/r/il/0a0e42/6052212684/il_fullxfull.6052212684_ltk0.jpg"
+    ];
+
+    // 2. Función clásica para barajar un array (Fisher-Yates)
+    function barajarArray(array) {
+        let arrayCopia = [...array]; 
+        for (let i = arrayCopia.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arrayCopia[i], arrayCopia[j]] = [arrayCopia[j], arrayCopia[i]];
+        }
+        return arrayCopia;
+    }
+
+    // 3. Seleccionamos las pistas
+    const leftTrack = document.querySelector('.carousel-left .track');
+    const rightTrack = document.querySelector('.carousel-right .track');
+
+    // 4. Función que construye y llena la pista
+    function generarPista(trackElement) {
+        if (!trackElement) return; // Por si acaso no existe en el HTML
+
+        // Barajamos las imágenes (cada carrusel tendrá un orden distinto)
+        const imagenesBarajadas = barajarArray(misImagenes);
+
+        // Generamos el HTML de una sola "tanda" de imágenes
+        let htmlTanda = '';
+        imagenesBarajadas.forEach(src => {
+            htmlTanda += `
+                <div class="miniatura">
+                    <a href="#">
+                        <img class="img-base" src="${src}"/>
+                        <img class="img-hover" src="${src}"/>
+                    </a>
+                </div>
+            `;
+        });
+
+        // Para asegurarnos de que la "manta" es súper larga, 
+        // pegamos la tanda 2 veces para crear el Bloque A.
+        const bloqueA = htmlTanda + htmlTanda;
+
+        // La Magia del CSS: Pegamos el Bloque A dos veces para que la mitad
+        // exacta de la pista sea idéntica a la otra mitad.
+        trackElement.innerHTML = bloqueA + bloqueA;
+    }
+
+    // 5. Ejecutamos la función en ambos lados
+    generarPista(leftTrack);
+    generarPista(rightTrack);
+});
+
+
 /* 
 =========================================
  # Gestor video
 ========================================= */
-
 
 const tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
@@ -131,7 +218,7 @@ function printLog(msg, color = "#00ff00", prefix = "[SYSTEM]") {
 /*=== Navegacion a sitios externos ===*/
 function navigateTo(url) {
   printLog(`Redirigiendo a entorno externo...`, "yellow", "[NET]");
-  setTimeout(() => window.open(url, '_blank'), 500); 
+  setTimeout(() => window.open(url, '_blank'), 300); 
 }
 
 

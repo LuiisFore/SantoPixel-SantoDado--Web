@@ -35,6 +35,12 @@
    # ESTRUCTURA BASE
    ========================================= */
 
+html {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+}
+
 body {
 
   background-color: var(--bg-color);
@@ -50,6 +56,10 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
 }
 
 /* Efecto CRT (Overlay de líneas de escaneo) */
@@ -388,4 +398,215 @@ footer {
     align-items: center;
     justify-content: center;
   }
+}
+
+/* =========================================
+   CARRUSELES FIJOS LATERALES (IZQUIERDA Y DERECHA)
+   ========================================= */
+
+/* Estilos base para ambos contenedores */
+.carousel-left,
+.carousel-right {
+    position: fixed;
+    top: 0;
+    width: 250px; 
+    height: 100vh;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none; /* No bloquean clics en el main */
+}
+
+/* Posicionamiento específico */
+.carousel-left { left: 20px; }
+.carousel-right { right: 20px; }
+
+/* Configuración de las pistas (tracks) */
+.carousel-left .track,
+.carousel-right .track {
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto; /* Reactivamos clics en las pistas */
+}
+
+/* Animaciones específicas por lado */
+.carousel-left .track {
+    /* El izquierdo baja */
+    animation: scrollVerticalDown 80s linear infinite; 
+}
+
+.carousel-right .track {
+    /* El derecho sube */
+    animation: scrollVerticalUp 80s linear infinite;
+}
+
+/* Pausa en hover */
+.carousel-left:hover .track,
+.carousel-right:hover .track {
+    animation-play-state: paused;
+}
+
+/* --- ESTILO DE LA MINIATURA --- */
+.carousel-left .miniatura,
+.carousel-right .miniatura {
+    width: 250px;
+    height: 350px;
+    margin-bottom: 20px; /* Espacio entre fotos */
+    position: relative;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 1px solid var(--text-color);
+}
+
+.carousel-left .miniatura a,
+.carousel-right .miniatura a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.carousel-left .miniatura img,
+.carousel-right .miniatura img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transform: translateZ(0);
+}
+
+.carousel-left .miniatura .img-base,
+.carousel-right .miniatura .img-base {
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.carousel-left .miniatura .img-hover,
+.carousel-right .miniatura .img-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.carousel-left .miniatura:hover .img-hover,
+.carousel-right .miniatura:hover .img-hover {
+    opacity: 0.85;
+}
+
+.carousel-left .miniatura:hover .img-base,
+.carousel-right .miniatura:hover .img-base {
+    filter: blur(5px);
+    transform: scale(1.03);
+}
+
+/* --- ANIMACIONES RESPONSIVAS --- */
+/* Sube (Para el derecho) */
+@keyframes scrollVerticalUp {
+    from { transform: translateY(0); }
+    /* El -50% mueve exactamente la mitad del track (3 de las 6 fotos) */
+    to { transform: translateY(-50%); } 
+}
+
+/* Baja (Para el izquierdo) */
+@keyframes scrollVerticalDown {
+    from { transform: translateY(-50%); }
+    to { transform: translateY(0); } 
+}
+
+/* =========================================
+   CARRUSELES FLUIDOS (Entre 1460px y 1341px)
+   ========================================= */
+@media (max-width: 1460px) and (min-width: 1341px) {
+    .carousel-left,
+    .carousel-right {
+        /* Define el ancho fluido en base al % de la pantalla */
+        width: 14%; 
+    }
+
+    .carousel-left .miniatura,
+    .carousel-right .miniatura {
+        /* Ocupa todo el espacio de su contenedor (ese 14%) */
+        width: 100%;
+        /* CLAVE: Anulamos la altura fija de 350px para que fluya */
+        height: auto; 
+        /* Mantiene la proporción perfecta sin importar el tamaño */
+        aspect-ratio: 250 / 350; 
+        /* Margen proporcional en lugar de píxeles fijos */
+        margin-bottom: 10%; 
+    }
+}
+
+/* =========================================
+   Carrusel a la mitad de tamaño (1270px y 1340px)
+   ========================================= */
+@media (max-width: 1340px) and (min-width: 1270px) {
+    .carousel-left,
+    .carousel-right {
+        /* Reducimos el ancho a la mitad exacta (7%). */
+        width: 12%; 
+    }
+
+    .carousel-left .miniatura,
+    .carousel-right .miniatura {
+        width: 100%;
+        /* CLAVE: Anulamos la altura fija de 350px también aquí */
+        height: auto; 
+        aspect-ratio: 250 / 350; 
+        margin-bottom: 10%; 
+    }
+}
+
+/* =========================================
+   carrusel a 1/4 de tamaño (1231px y 1269px)
+   ========================================= */
+@media (max-width: 1269px) and (min-width: 1231px) {
+    .carousel-left,
+    .carousel-right {
+        /* Reducimos el ancho a la mitad exacta (7%). */
+        width: 10%; 
+    }
+
+    .carousel-left .miniatura,
+    .carousel-right .miniatura {
+        width: 100%;
+        /* CLAVE: Anulamos la altura fija de 350px también aquí */
+        height: auto; 
+        aspect-ratio: 250 / 350; 
+        margin-bottom: 10%; 
+    }
+}
+
+/* =========================================
+   OCULTAR EN MÓVILES (Ambos carruseles)
+   ========================================= */
+@media (max-width: 1230px) and (min-width: 1201px) {
+    .carousel-left,
+    .carousel-right {
+        /* Reducimos el ancho a la mitad exacta (7%). */
+        width: 10%; 
+    }
+
+    .carousel-left .miniatura,
+    .carousel-right .miniatura {
+        width: 100%;
+        /* CLAVE: Anulamos la altura fija de 350px también aquí */
+        height: auto; 
+        aspect-ratio: 250 / 350; 
+        margin-bottom: 10%; 
+    }
+}
+
+/* =========================================
+   OCULTAR EN MÓVILES (Ambos carruseles)
+   ========================================= */
+@media (max-width: 1200px) {
+    .carousel-left,
+    .carousel-right {
+        display: none !important;
+        width: 0;
+        height: 0;
+        visibility: hidden;
+    }
 }

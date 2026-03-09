@@ -125,3 +125,66 @@ window.onYouTubeIframeAPIReady = function() {
   });
 };
 ===========================================================
+
+/* =========================================
+ # Gestor Carrusel YouTube (RSS to JSON)
+========================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+  // ⚠️ REEMPLAZA ESTO CON EL ID DE TU CANAL (Debe empezar por UC...)
+  const CANAL_ID = 'UC_PON_TU_ID_AQUI'; 
+  const RSS_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${CANAL_ID}`;
+  const API_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}`;
+
+  fetch(API_URL)
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'ok') {
+            renderCarruselYouTube(data.items);
+            // ¡Usamos tu propia función de logs para informar al sistema!
+            if(typeof printLog === 'function') {
+                printLog("Carrusel sincronizado con la red externa.", "#00ffff", "[YOUTUBE]");
+            }
+        } else {
+            throw new Error("Estado de respuesta no OK");
+        }
+    })
+    .catch(error => {
+        console.error("> [SYSTEM ERROR] Fallo al cargar YouTube:", error);
+        if(typeof printLog === 'function') {
+            printLog("Fallo al conectar con la red de YouTube.", "var(--color-error)", "[NET-ERROR]");
+        }
+    });
+});
+
+function renderCarruselYouTube(videos) {
+  const track = document.querySelector(".carousel-right .track");
+  if (!track) return;
+
+  track.innerHTML = ''; // Limpiamos las imágenes placeholder de Etsy
+
+  // Tomamos solo los últimos 6 videos (o los que necesites)
+  const ultimosVideos = videos.slice(0, 6);
+
+  ultimosVideos.forEach(video => {
+    // Truco: cambiar "hqdefault" a "maxresdefault" para mayor calidad si está disponible
+    const miniaturaUrl = video.thumbnail.replace("hqdefault", "maxresdefault");
+
+    // Construimos la estructura exacta que pide tu CSS
+    const div = document.createElement('div');
+    div.className = 'miniatura';
+    
+    div.innerHTML = `
+        <a href="${video.link}" target="_blank" rel="noopener noreferrer" title="${video.title}">
+            <img class="img-base" src="${miniaturaUrl}" alt="Miniatura base" />
+            <img class="img-hover" src="${miniaturaUrl}" alt="Miniatura hover" />
+        </a>
+    `;
+    
+    track.appendChild(div);
+  });
+}
+
+===========================================================
+https://asciiart.pankajtanwar.in/
+===========================================================
