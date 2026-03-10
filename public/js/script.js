@@ -1,7 +1,9 @@
 /* 
 =========================================
- # Gestor de Sponsors
+ # Gestor de fecha y  Sponsors
 ========================================= */
+
+document.getElementById('year').textContent = new Date().getFullYear();
 
 document.addEventListener("DOMContentLoaded", () => {
   fetch('/sponsors.json')
@@ -51,6 +53,7 @@ function renderSponsorsDado(sponsorsList) {
     grid.appendChild(box);
   });   
 }
+
 
 /* 
 =========================================
@@ -147,6 +150,7 @@ window.onYouTubeIframeAPIReady = function() {
   });
 };
 
+
 /* 
 =========================================
  # Teclado Secreto
@@ -192,6 +196,13 @@ const COMANDOS_SISTEMA = {
 
 //Invocaciones
 
+/*=== Navegacion a sitios externos ===*/
+function navigateTo(url) {
+  printLog(`Redirigiendo a entorno externo...`, "yellow", "[NET]");
+  setTimeout(() => window.open(url, '_blank'), 300); 
+}
+
+
 /*=== Entradas terminal simulada ===*/
 function printLog(msg, color = "#00ff00", prefix = "[SYSTEM]") {
   const logsContainer = document.querySelector(".terminal-logs");
@@ -215,14 +226,7 @@ function printLog(msg, color = "#00ff00", prefix = "[SYSTEM]") {
 }
 
 
-/*=== Navegacion a sitios externos ===*/
-function navigateTo(url) {
-  printLog(`Redirigiendo a entorno externo...`, "yellow", "[NET]");
-  setTimeout(() => window.open(url, '_blank'), 300); 
-}
-
-
-/*=== Funciones ===*/
+/*=== Funciones y Animaciones ===*/
 function summonCat() {
   const catAscii = `<pre style="margin:0; line-height:1.2; font-family: monospace;">
   |\\__/,|   ( \\                                        
@@ -268,7 +272,7 @@ function triggerRollDice() {
     } else if (estadoDelOrco.resultadoAnterior >= 2 && estadoDelOrco.resultadoAnterior <= 9) {
       mensajeFinal = "Intentas levantarte para un segundo round, pero el Orco se ríe y te pisa la cabeza reventandola como una sandia. Game Over definitivo.";
     } else if (estadoDelOrco.resultadoAnterior >= 10 && estadoDelOrco.resultadoAnterior <= 19) {
-      mensajeFinal = "¡Esquivaste el primero, pero tu movimiento extra enfurece al Orco! Que termina tu vida como una cucaracha con un pisoton. Esto no es DarkSouls";
+      mensajeFinal = "¡Esquivaste el primero, pero tu movimiento extra enfurece al Orco! Que termina tu vida como una cucaracha con un pisoton. Esto no es DarkSouls.";
     } else {
       mensajeFinal = "El orco ya había explotado. Pero tu insistencia invoca a un Nigromante que trae devuelta el Orco a la vida para terminar con tu miserable insistencia.";
     }
